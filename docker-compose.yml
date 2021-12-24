@@ -1,0 +1,37 @@
+version: '2.2'
+
+services:
+    app_server:
+        build: .
+        restart: always
+        ports:
+            - "8080:8080"
+        depends_on:
+            -   mysql_db
+        environment:
+            SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+            SPRING_DATASOURCE_USERNAME: ${DATABASE_USERNAME}
+            SPRING_DATASOURCE_PASSWORD: ${DATABASE_PASSWORD}
+            JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+            JWT_EXPIRATION_TIME: ${JWT_EXPIRATION_TIME}
+        networks:
+            - backend
+    mysql_db:
+        image: "mysql:latest"
+        restart: always
+        ports:
+            - "3307:3306"
+        environment:
+            MYSQL_DATABASE: ${DATABASE_DB_NAME}
+            MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+        networks:
+            - backend
+        volumes:
+            - db-data:/var/lib/mysql
+
+volumes:
+    db-data:
+
+networks:
+    backend:

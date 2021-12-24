@@ -1,0 +1,6 @@
+embedded:
+    mysql:
+        enabled: true
+        docker-image: mysql:latest
+        user: mysql
+        password: root

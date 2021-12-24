@@ -1,7 +1,9 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.1'
+	id 'org.springframework.boot' version '2.5.6'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
+	id 'checkstyle'
 }
 
 group = 'com.intransition.chikanoff'
@@ -19,11 +21,14 @@ repositories {
 }
 
 ext {
-	mysqlVersion = "8.0.21"
+	mysqlVersion = '8.0.25'
 	springSecurityVersion = "5.5.2"
 	javaxValidationVersion = "2.0.1.Final"
-	springBootVersion = "2.6.1"
+	springBootVersion = "2.5.6"
+	checkStyleVersion = '9.1'
 	jwtVersion = "0.9.1"
+	mockitoVersion = '4.1.0'
+	testContainersVersion = '2.0.18'
 }
 
 dependencies {
@@ -42,9 +47,61 @@ dependencies {
 
 	implementation "mysql:mysql-connector-java:$mysqlVersion"
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation "org.projectlombok:lombok"
+	testAnnotationProcessor "org.projectlombok:lombok"
+	testImplementation "org.liquibase:liquibase-core"
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	testImplementation "org.springframework.cloud:spring-cloud-starter-bootstrap:3.0.4"
+	testImplementation "com.playtika.testcontainers:embedded-mysql:${testContainersVersion}"
+	testImplementation "org.mockito:mockito-core:${mockitoVersion}"
 }
 
 test {
 	useJUnitPlatform()
+}
+
+def qualityExcludeList = [
+		'**/beans/**',
+		'**/exceptions/**',
+		'**/payloads/**'
+]
+
+jacocoTestReport {
+	dependsOn test
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: qualityExcludeList)
+		}))
+	}
+}
+
+jacocoTestCoverageVerification {
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: qualityExcludeList)
+		}))
+	}
+
+	violationRules {
+		rule {
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.9
+			}
+		}
+		rule {
+			limit {
+				counter = 'BRANCH'
+				value = 'COVEREDRATIO'
+				minimum = 0.8
+			}
+		}
+	}
+}
+
+check.dependsOn jacocoTestCoverageVerification
+
+checkstyle {
+	toolVersion = checkStyleVersion
 }
