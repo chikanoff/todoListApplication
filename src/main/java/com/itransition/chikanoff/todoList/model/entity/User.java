@@ -1,5 +1,7 @@
 package com.itransition.chikanoff.todoList.model.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +18,8 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -33,11 +37,4 @@ public class User {
 
     @Column(nullable = false, length = 256)
     private String password;
-
-    public User(String fullName, String username, String email, String password) {
-        this.fullName = fullName;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
 }

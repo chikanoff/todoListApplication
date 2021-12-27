@@ -8,9 +8,11 @@ import com.itransition.chikanoff.todoList.model.dto.CreateTodoItemRequest;
 import com.itransition.chikanoff.todoList.repository.TodoItemRepository;
 import com.itransition.chikanoff.todoList.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TodoItemServiceImpl implements TodoItemService {
@@ -22,28 +24,28 @@ public class TodoItemServiceImpl implements TodoItemService {
     private UserRepository userRepository;
 
     @Override
-    public void create(CreateTodoItemRequest item, String username) {
-        if (userRepository.existsByUsername(username)) {
-            User currentUser = userRepository.findByUsername(username).get();
-            TodoItem todo = TodoItem.builder()
-                                    .name(item.getName())
-                                    .description(item.getDescription())
-                                    .date(item.getDate())
-                                    .build();
-            todo.setUser(currentUser);
-            todoItemRepository.save(todo);
-        }
+    public void create(CreateTodoItemRequest item) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(username).get();
+        TodoItem todo = TodoItem.builder()
+                                .name(item.getName())
+                                .description(item.getDescription())
+                                .date(item.getDate())
+                                .build();
+        todo.setUser(currentUser);
+        todoItemRepository.save(todo);
     }
 
     @Override
-    public void update(Long id, UpdateTodoItemRequest item) {
-        if (todoItemRepository.findById(id).isPresent()) {
-            TodoItem existingItem = todoItemRepository.getById(id);
+    public void update(Long id, UpdateTodoItemRequest req) {
+        Optional<TodoItem> item = todoItemRepository.findById(id);
+        if (item.isPresent()) {
+            TodoItem existingItem = item.get();
 
-            existingItem.setDescription(item.getDescription());
-            existingItem.setName(item.getName());
-            existingItem.setDate(item.getDate());
-            existingItem.setDone(item.isDone());
+            existingItem.setDescription(req.getDescription());
+            existingItem.setName(req.getName());
+            existingItem.setDate(req.getDate());
+            existingItem.setDone(req.isDone());
 
             todoItemRepository.save(existingItem);
         } else {
@@ -53,9 +55,10 @@ public class TodoItemServiceImpl implements TodoItemService {
 
     @Override
     public void changeStatus(Long id) {
-        if (todoItemRepository.findById(id).isPresent()) {
-            TodoItem item = todoItemRepository.getById(id);
-            item.setDone(!item.isDone());
+        Optional<TodoItem> item = todoItemRepository.findById(id);
+        if (item.isPresent()) {
+            TodoItem existingItem = item.get();
+            existingItem.setDone(!existingItem.isDone());
         } else {
             throw new ItemNotFoundException("Item not found with id " + id);
         }
@@ -63,20 +66,16 @@ public class TodoItemServiceImpl implements TodoItemService {
 
     @Override
     public void delete(Long id) {
-        if (todoItemRepository.findById(id).isPresent()) {
-            todoItemRepository.deleteById(id);
-        } else {
-            throw new ItemNotFoundException("Item not found with id " + id);
-        }
+        todoItemRepository.deleteById(id);
     }
 
     @Override
-    public List<TodoItem> get() {
+    public List<TodoItem> findAll() {
         return todoItemRepository.findAll();
     }
 
     @Override
-    public TodoItem get(Long id) {
+    public TodoItem findById(Long id) {
         if (todoItemRepository.findById(id).isPresent()) {
             return todoItemRepository.getById(id);
         } else {

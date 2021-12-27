@@ -26,18 +26,17 @@ public class TodoController {
 
     @GetMapping("/{id}")
     public TodoItem get(@PathVariable("id") Long id) {
-        return todoService.get(id);
+        return todoService.findById(id);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public List<TodoItem> get() {
-        return todoService.get();
+        return todoService.findAll();
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public void add(@RequestBody CreateTodoItemRequest item) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        todoService.create(item, username);
+        todoService.create(item);
     }
 
     @PatchMapping("/{id}")

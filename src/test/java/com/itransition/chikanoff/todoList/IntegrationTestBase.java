@@ -33,12 +33,13 @@ public abstract class IntegrationTestBase {
     private PasswordEncoder encoder;
 
     public User createTestUser() {
-        return userRepository.saveAndFlush(new User(
-                "testFullName",
-                "test",
-                "testEmail@gmail.com",
-                encoder.encode("password")
-        ));
+        return userRepository.saveAndFlush(
+                User.builder()
+                        .fullName("testFullName")
+                        .username("test")
+                        .email("testEmail@gmail.com")
+                        .password(encoder.encode("password"))
+                        .build());
     }
 
     public TodoItem createTestTodoItem() {

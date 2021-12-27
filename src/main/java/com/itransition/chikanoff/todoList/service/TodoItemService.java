@@ -7,7 +7,7 @@ import com.itransition.chikanoff.todoList.model.dto.CreateTodoItemRequest;
 import java.util.List;
 
 public interface TodoItemService {
-    void create(CreateTodoItemRequest item, String username);
+    void create(CreateTodoItemRequest item);
 
     void update(Long id, UpdateTodoItemRequest item);
 
@@ -15,7 +15,7 @@ public interface TodoItemService {
 
     void delete(Long id);
 
-    List<TodoItem> get();
+    List<TodoItem> findAll();
 
-    TodoItem get(Long id);
+    TodoItem findById(Long id);
 }

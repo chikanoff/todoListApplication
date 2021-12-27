@@ -24,7 +24,11 @@ public class UserServiceUnitTest {
 
     @Test
     public void createUserReturnsEmailExist() {
-        User user = new User("fullName", "username", "email@ia.co", "password");
+        User user = User.builder().fullName("fullName")
+                                  .username("username")
+                                  .email("email@ia.co")
+                                  .password("password")
+                                  .build();
         when(userRepository.existsByEmail(user.getEmail())).thenReturn(true);
 
         SignupRequest req = new SignupRequest();
@@ -39,7 +43,11 @@ public class UserServiceUnitTest {
 
     @Test
     public void createUserReturnsUsernameExist() {
-        User user = new User("fullName", "username", "email@ia.co", "password");
+        User user = User.builder().fullName("fullName")
+                                  .username("username")
+                                  .email("email@ia.co")
+                                  .password("password")
+                                  .build();
         when(userRepository.existsByUsername(user.getUsername())).thenReturn(true);
 
         SignupRequest req = new SignupRequest();

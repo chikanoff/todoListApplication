@@ -5,8 +5,14 @@ import com.itransition.chikanoff.todoList.model.dto.UpdateTodoItemRequest;
 import com.itransition.chikanoff.todoList.model.entity.TodoItem;
 import com.itransition.chikanoff.todoList.model.entity.User;
 import com.itransition.chikanoff.todoList.model.dto.CreateTodoItemRequest;
+import com.itransition.chikanoff.todoList.service.jwt.UserDetailsImpl;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
@@ -24,7 +30,7 @@ public class TodoServiceTest extends IntegrationTestBase {
 
     @Test
     public void getByIdReturnsException() {
-        assertThatThrownBy(() -> todoItemService.get(id)).hasMessage("Item not found with id " + id);
+        assertThatThrownBy(() -> todoItemService.findById(id)).hasMessage("Item not found with id " + id);
     }
 
     @Test
@@ -47,11 +53,12 @@ public class TodoServiceTest extends IntegrationTestBase {
         final int year = 2021;
         final int day = 21;
         User user = createTestUser();
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(UserDetailsImpl.build(user), null, null));
         CreateTodoItemRequest itemRequest = new CreateTodoItemRequest();
         itemRequest.setName("name");
         itemRequest.setDescription("desc");
         itemRequest.setDate(new Date(year, Calendar.DECEMBER, day));
-        todoItemService.create(itemRequest, user.getUsername());
+        todoItemService.create(itemRequest);
 
         List<TodoItem> items = getTodoItemRepository().findAll();
         TodoItem item = items.get(items.size() - 1);
@@ -100,13 +107,13 @@ public class TodoServiceTest extends IntegrationTestBase {
     @Test
     public void getAllTest() {
         createTestTodoItem();
-        assertThat(todoItemService.get().size()).isEqualTo(1);
+        assertThat(todoItemService.findAll().size()).isEqualTo(1);
     }
 
     @Test
     public void getOneTest() {
         TodoItem item = createTestTodoItem();
-        TodoItem added = todoItemService.get(item.getId());
+        TodoItem added = todoItemService.findById(item.getId());
         assertThat(added.getName()).isEqualTo(item.getName());
         assertThat(added.getDescription()).isEqualTo(item.getDescription());
     }

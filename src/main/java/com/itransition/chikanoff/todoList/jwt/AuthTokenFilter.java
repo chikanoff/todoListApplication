@@ -1,5 +1,6 @@
 package com.itransition.chikanoff.todoList.jwt;
 
+import com.fasterxml.jackson.datatype.jdk8.OptionalSerializer;
 import com.itransition.chikanoff.todoList.service.jwt.UserDetailsServiceImpl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 @Log4j2
 public class AuthTokenFilter extends OncePerRequestFilter {
@@ -28,10 +31,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-
-                String username = jwtUtils.getUserNameFromJwtToken(jwt);
+            Optional<String> jwt = Optional.ofNullable(parseJwt(request));
+            if (jwtUtils.validateJwtToken(jwt.orElseThrow())) {
+                String username = jwtUtils.getUserNameFromJwtToken(jwt.orElseThrow());
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, null);
@@ -54,6 +56,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             return headerAuth.substring(bearerLength);
         }
 
-        return headerAuth;
+        return null;
     }
 }

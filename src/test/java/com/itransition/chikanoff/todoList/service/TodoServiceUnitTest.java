@@ -31,14 +31,6 @@ public class TodoServiceUnitTest {
     }
 
     @Test
-    public void deleteThrowsException() {
-        Long id = 1L;
-        when(todoItemRepository.findById(id).isPresent()).thenReturn(true);
-
-        assertThatThrownBy(() -> todoItemService.delete(id)).hasMessage("Item not found with id " + id);
-    }
-
-    @Test
     public void changeStatusThrowsException() {
         Long id = 1L;
         when(todoItemRepository.findById(id).isPresent()).thenReturn(true);
@@ -51,6 +43,6 @@ public class TodoServiceUnitTest {
         Long id = 1L;
         when(todoItemRepository.findById(id).isPresent()).thenReturn(true);
 
-        assertThatThrownBy(() -> todoItemService.get(id)).hasMessage("Item not found with id " + id);
+        assertThatThrownBy(() -> todoItemService.findById(id)).hasMessage("Item not found with id " + id);
     }
 }

@@ -20,10 +20,12 @@ public class UserService {
         checkUsernameExist(signupRequest.getUsername());
         checkEmailExist(signupRequest.getEmail());
 
-        userRepository.saveAndFlush(new User(signupRequest.getFullName(),
-                                             signupRequest.getUsername(),
-                                             signupRequest.getEmail(),
-                                             encoder.encode(signupRequest.getPassword())));
+        userRepository.saveAndFlush(User.builder()
+                                        .fullName(signupRequest.getFullName())
+                                        .username(signupRequest.getUsername())
+                                        .email(signupRequest.getEmail())
+                                        .password(encoder.encode(signupRequest.getPassword()))
+                                        .build());
     }
 
     private void checkEmailExist(String email) throws DataExistException {
