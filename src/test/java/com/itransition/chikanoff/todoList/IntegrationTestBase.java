@@ -1,7 +1,7 @@
 package com.itransition.chikanoff.todoList;
 
-import com.itransition.chikanoff.todoList.beans.TodoItem;
-import com.itransition.chikanoff.todoList.beans.User;
+import com.itransition.chikanoff.todoList.model.entity.TodoItem;
+import com.itransition.chikanoff.todoList.model.entity.User;
 import com.itransition.chikanoff.todoList.repository.TodoItemRepository;
 import com.itransition.chikanoff.todoList.repository.UserRepository;
 import lombok.Getter;
@@ -45,7 +45,7 @@ public abstract class IntegrationTestBase {
         final int year = 2021;
         final int day = 21;
         User user = createTestUser();
-        TodoItem item = new TodoItem("name", "description", new Date(year, Calendar.DECEMBER, day));
+        TodoItem item = TodoItem.builder().name("name").description("description").date(new Date(year, Calendar.DECEMBER, day)).build();
         item.setUser(user);
         return todoItemRepository.saveAndFlush(item);
     }

@@ -1,7 +1,7 @@
 package com.itransition.chikanoff.todoList.service.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.itransition.chikanoff.todoList.beans.User;
+import com.itransition.chikanoff.todoList.model.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

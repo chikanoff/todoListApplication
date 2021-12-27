@@ -1,9 +1,10 @@
 package com.itransition.chikanoff.todoList.service;
 
 import com.itransition.chikanoff.todoList.IntegrationTestBase;
-import com.itransition.chikanoff.todoList.beans.TodoItem;
-import com.itransition.chikanoff.todoList.beans.User;
-import com.itransition.chikanoff.todoList.payloads.request.TodoItemRequest;
+import com.itransition.chikanoff.todoList.model.dto.UpdateTodoItemRequest;
+import com.itransition.chikanoff.todoList.model.entity.TodoItem;
+import com.itransition.chikanoff.todoList.model.entity.User;
+import com.itransition.chikanoff.todoList.model.dto.CreateTodoItemRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class TodoServiceTest extends IntegrationTestBase {
 
     @Test
     public void editReturnsException() {
-        assertThatThrownBy(() -> todoItemService.update(id, new TodoItemRequest())).hasMessage("Item not found with id " + id);
+        assertThatThrownBy(() -> todoItemService.update(id, new UpdateTodoItemRequest())).hasMessage("Item not found with id " + id);
     }
 
     @Test
@@ -46,7 +47,7 @@ public class TodoServiceTest extends IntegrationTestBase {
         final int year = 2021;
         final int day = 21;
         User user = createTestUser();
-        TodoItemRequest itemRequest = new TodoItemRequest();
+        CreateTodoItemRequest itemRequest = new CreateTodoItemRequest();
         itemRequest.setName("name");
         itemRequest.setDescription("desc");
         itemRequest.setDate(new Date(year, Calendar.DECEMBER, day));
@@ -85,10 +86,8 @@ public class TodoServiceTest extends IntegrationTestBase {
         assertThat(addedItem.getName()).isEqualTo(item.getName());
         assertThat(addedItem.getDescription()).isEqualTo(item.getDescription());
 
-        TodoItem newItem = new TodoItem();
-        newItem.setName("newName");
-        newItem.setDescription("newDesc");
-        TodoItemRequest req = new TodoItemRequest();
+        TodoItem newItem = TodoItem.builder().name("newName").description("newDesc").build();
+        UpdateTodoItemRequest req = new UpdateTodoItemRequest();
         req.setName(newItem.getName());
         req.setDescription(newItem.getDescription());
         req.setDate(item.getDate());

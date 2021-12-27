@@ -1,4 +1,4 @@
-package com.itransition.chikanoff.todoList.beans;
+package com.itransition.chikanoff.todoList.model.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

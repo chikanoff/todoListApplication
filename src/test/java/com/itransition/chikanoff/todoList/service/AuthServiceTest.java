@@ -1,9 +1,9 @@
 package com.itransition.chikanoff.todoList.service;
 
 import com.itransition.chikanoff.todoList.IntegrationTestBase;
-import com.itransition.chikanoff.todoList.beans.User;
+import com.itransition.chikanoff.todoList.model.entity.User;
 import com.itransition.chikanoff.todoList.jwt.JwtUtils;
-import com.itransition.chikanoff.todoList.payloads.response.JwtResponse;
+import com.itransition.chikanoff.todoList.model.dto.JwtResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

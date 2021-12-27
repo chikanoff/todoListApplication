@@ -1,7 +1,7 @@
 package com.itransition.chikanoff.todoList.service;
 
-import com.itransition.chikanoff.todoList.beans.User;
-import com.itransition.chikanoff.todoList.payloads.request.SignupRequest;
+import com.itransition.chikanoff.todoList.model.entity.User;
+import com.itransition.chikanoff.todoList.model.dto.SignupRequest;
 import com.itransition.chikanoff.todoList.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,8 +1,8 @@
 package com.itransition.chikanoff.todoList.controller;
 
-import com.itransition.chikanoff.todoList.payloads.request.LoginRequest;
-import com.itransition.chikanoff.todoList.payloads.request.SignupRequest;
-import com.itransition.chikanoff.todoList.payloads.response.JwtResponse;
+import com.itransition.chikanoff.todoList.model.dto.LoginRequest;
+import com.itransition.chikanoff.todoList.model.dto.SignupRequest;
+import com.itransition.chikanoff.todoList.model.dto.JwtResponse;
 import com.itransition.chikanoff.todoList.service.AuthService;
 import com.itransition.chikanoff.todoList.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class AuthController {
         return authService.login(loginRequest.getUsername(), loginRequest.getPassword());
     }
 
-    @PostMapping(value = "/signup")
+    @PostMapping("/signup")
     public void registerUser(@RequestBody SignupRequest signUpRequest) {
         userService.createUser(signUpRequest);
     }

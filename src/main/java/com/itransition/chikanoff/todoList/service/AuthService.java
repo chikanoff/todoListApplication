@@ -1,7 +1,7 @@
 package com.itransition.chikanoff.todoList.service;
 
 import com.itransition.chikanoff.todoList.jwt.JwtUtils;
-import com.itransition.chikanoff.todoList.payloads.response.JwtResponse;
+import com.itransition.chikanoff.todoList.model.dto.JwtResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

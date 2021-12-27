@@ -1,4 +1,4 @@
-package com.itransition.chikanoff.todoList.payloads.request;
+package com.itransition.chikanoff.todoList.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;

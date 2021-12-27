@@ -2,10 +2,10 @@ package com.itransition.chikanoff.todoList.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itransition.chikanoff.todoList.IntegrationTestBase;
-import com.itransition.chikanoff.todoList.beans.TodoItem;
-import com.itransition.chikanoff.todoList.beans.User;
-import com.itransition.chikanoff.todoList.payloads.request.LoginRequest;
-import com.itransition.chikanoff.todoList.payloads.request.TodoItemRequest;
+import com.itransition.chikanoff.todoList.model.entity.TodoItem;
+import com.itransition.chikanoff.todoList.model.entity.User;
+import com.itransition.chikanoff.todoList.model.dto.LoginRequest;
+import com.itransition.chikanoff.todoList.model.dto.CreateTodoItemRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,7 +29,7 @@ public class TodoControllerTests extends IntegrationTestBase {
     private String getTokenFromAuthorization() throws Exception {
         final String username = "test";
         User user;
-        if (getUserRepository().findByUsername(username).isPresent()) {
+        if (getUserRepository().existsByUsername(username)) {
             user = getUserRepository().findByUsername(username).get();
         } else {
             user = createTestUser();
@@ -52,7 +52,7 @@ public class TodoControllerTests extends IntegrationTestBase {
 
     @Test
     public void createTodoItemTest() throws Exception {
-        TodoItemRequest req = new TodoItemRequest();
+        CreateTodoItemRequest req = new CreateTodoItemRequest();
         req.setName("name");
         req.setDescription("desc");
         req.setDate(new Date());
@@ -119,7 +119,7 @@ public class TodoControllerTests extends IntegrationTestBase {
         TodoItem item = createTestTodoItem();
         String token = getTokenFromAuthorization();
 
-        TodoItemRequest req = new TodoItemRequest();
+        CreateTodoItemRequest req = new CreateTodoItemRequest();
         req.setName("newName");
         req.setDescription("newDesc");
         req.setDate(new Date());

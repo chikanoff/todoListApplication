@@ -1,7 +1,7 @@
 package com.itransition.chikanoff.todoList.controller;
 
 import com.itransition.chikanoff.todoList.exceptions.ItemNotFoundException;
-import com.itransition.chikanoff.todoList.payloads.response.MessageResponse;
+import com.itransition.chikanoff.todoList.model.dto.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

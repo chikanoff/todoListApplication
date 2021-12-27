@@ -1,7 +1,10 @@
-package com.itransition.chikanoff.todoList.beans;
+package com.itransition.chikanoff.todoList.model.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -14,11 +17,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
 
+
 @Entity
 @Table(name = "todoItems")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class TodoItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,28 +34,15 @@ public class TodoItem {
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
-    @Column(name = "name", nullable = false, length = 256)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "description", nullable = false, length = 256)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date")
     private Date date;
 
     @Column(name = "isDone")
-    private boolean isDone = false;
-
-    public TodoItem(String name, String description, java.util.Date date) {
-        this.name = name;
-        this.description = description;
-        this.date = date;
-    }
-
-    public TodoItem(String name, String description, java.util.Date date, boolean isDone) {
-        this.name = name;
-        this.description = description;
-        this.date = date;
-        this.isDone = isDone;
-    }
+    private boolean isDone;
 }

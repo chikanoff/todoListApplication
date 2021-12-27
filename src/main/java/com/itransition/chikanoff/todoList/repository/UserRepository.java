@@ -1,6 +1,6 @@
 package com.itransition.chikanoff.todoList.repository;
 
-import com.itransition.chikanoff.todoList.beans.User;
+import com.itransition.chikanoff.todoList.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
