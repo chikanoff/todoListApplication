@@ -76,8 +76,9 @@ public class TodoItemServiceImpl implements TodoItemService {
 
     @Override
     public TodoItem findById(Long id) {
-        if (todoItemRepository.findById(id).isPresent()) {
-            return todoItemRepository.getById(id);
+        Optional<TodoItem> item = todoItemRepository.findById(id);
+        if (item.isPresent()) {
+            return item.get();
         } else {
             throw new ItemNotFoundException("Item not found with id " + id);
         }
