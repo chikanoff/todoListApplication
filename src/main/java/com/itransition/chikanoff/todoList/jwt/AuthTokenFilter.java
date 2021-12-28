@@ -31,16 +31,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            Optional<String> jwt = Optional.ofNullable(parseJwt(request));
-            if (jwtUtils.validateJwtToken(jwt.orElseThrow())) {
-                String username = jwtUtils.getUserNameFromJwtToken(jwt.orElseThrow());
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, null);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            Optional.ofNullable(parseJwt(request))
+                    .filter(jwtUtils::validateJwtToken)
+                    .map(userDetailsService::loadUserByUsername)
+                    .map(user -> new UsernamePasswordAuthenticationToken(user, null))
+                    .ifPresent(SecurityContextHolder.getContext()::setAuthentication);
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            filterChain.doFilter(request, response);
         } catch (Exception e) {
             log.error("Cannot set user authentication: {}", e.getMessage());
         }
