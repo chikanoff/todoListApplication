@@ -38,24 +38,25 @@ public class TodoItemServiceImpl implements TodoItemService {
 
     @Override
     public void update(Long id, UpdateTodoItemRequest req) {
-        Optional<TodoItem> item = todoItemRepository.findById(id);
-        if (item.isPresent()) {
-            TodoItem existingItem = item.get();
-
-            existingItem.setDescription(req.getDescription());
-            existingItem.setName(req.getName());
-            existingItem.setDate(req.getDate());
-            existingItem.setDone(req.isDone());
-
-            todoItemRepository.save(existingItem);
-        } else {
-            throw new ItemNotFoundException("Item not found with id " + id);
-        }
+        Optional<TodoItem> i = todoItemRepository.findById(id);
+        i.ifPresentOrElse(
+                x -> {
+                    x.setDescription(req.getDescription());
+                    x.setDone(req.isDone());
+                    x.setName(req.getName());
+                    x.setDate(req.getDate());
+                    todoItemRepository.save(x);
+                },
+                () -> {
+                    throw new ItemNotFoundException("Item not found with id" + id);
+                });
     }
 
     @Override
     public void changeStatus(Long id) {
         Optional<TodoItem> item = todoItemRepository.findById(id);
+        // NEW
+        // OLD
         if (item.isPresent()) {
             TodoItem existingItem = item.get();
             existingItem.setDone(!existingItem.isDone());
