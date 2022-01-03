@@ -1,14 +1,12 @@
 package com.itransition.chikanoff.todoList.service;
 
-import com.itransition.chikanoff.todoList.mapper.CreateRequestTodoItemMapper;
-import com.itransition.chikanoff.todoList.mapper.SignUpRequestUserMapper;
+import com.itransition.chikanoff.todoList.mapper.UserMapper;
 import com.itransition.chikanoff.todoList.model.entity.User;
 import com.itransition.chikanoff.todoList.exceptions.DataExistException;
 import com.itransition.chikanoff.todoList.model.dto.SignupRequest;
 import com.itransition.chikanoff.todoList.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +18,13 @@ public class UserService {
 
     private final PasswordEncoder encoder;
 
+    @Autowired
+    private UserMapper userMapper;
+
     public void createUser(SignupRequest signupRequest) {
         checkUsernameExist(signupRequest.getUsername());
         checkEmailExist(signupRequest.getEmail());
-        User user = SignUpRequestUserMapper.INSTANCE.signUpRequestToUser(signupRequest);
+        User user = userMapper.signUpRequestToUser(signupRequest);
         userRepository.saveAndFlush(user);
     }
 

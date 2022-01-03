@@ -1,12 +1,13 @@
 package com.itransition.chikanoff.todoList.mapper;
 
 import com.itransition.chikanoff.todoList.model.dto.CreateTodoItemRequest;
+import com.itransition.chikanoff.todoList.model.dto.UpdateTodoItemRequest;
 import com.itransition.chikanoff.todoList.model.entity.TodoItem;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.MappingTarget;
 
-@Mapper
-public interface CreateRequestTodoItemMapper {
-    CreateRequestTodoItemMapper INSTANCE = Mappers.getMapper(CreateRequestTodoItemMapper.class);
+@Mapper(componentModel = "spring")
+public interface TodoItemMapper {
     TodoItem requestToTodoItem(CreateTodoItemRequest req);
+    void updateWithUpdateRequest(UpdateTodoItemRequest req, @MappingTarget TodoItem item);
 }

@@ -1,6 +1,6 @@
 package com.itransition.chikanoff.todoList.service;
 
-import com.itransition.chikanoff.todoList.mapper.CreateRequestTodoItemMapper;
+import com.itransition.chikanoff.todoList.mapper.TodoItemMapper;
 import com.itransition.chikanoff.todoList.model.dto.UpdateTodoItemRequest;
 import com.itransition.chikanoff.todoList.model.entity.TodoItem;
 import com.itransition.chikanoff.todoList.model.entity.User;
@@ -8,13 +8,11 @@ import com.itransition.chikanoff.todoList.exceptions.ItemNotFoundException;
 import com.itransition.chikanoff.todoList.model.dto.CreateTodoItemRequest;
 import com.itransition.chikanoff.todoList.repository.TodoItemRepository;
 import com.itransition.chikanoff.todoList.repository.UserRepository;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TodoItemServiceImpl implements TodoItemService {
@@ -25,12 +23,15 @@ public class TodoItemServiceImpl implements TodoItemService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TodoItemMapper todoItemMapper;
+
     @Override
     public void create(CreateTodoItemRequest item) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username).orElseThrow(ItemNotFoundException::new);
 
-        TodoItem todo = CreateRequestTodoItemMapper.INSTANCE.requestToTodoItem(item);
+        TodoItem todo = todoItemMapper.requestToTodoItem(item);
         todo.setUser(currentUser);
         todoItemRepository.save(todo);
     }
@@ -38,9 +39,7 @@ public class TodoItemServiceImpl implements TodoItemService {
     @Override
     public void update(Long id, UpdateTodoItemRequest req) {
         TodoItem item = findOrThrow(id);
-        item.setName(req.getName());
-        item.setDescription(req.getDescription());
-        item.setDate(req.getDate());
+        todoItemMapper.updateWithUpdateRequest(req, item);
         todoItemRepository.save(item);
     }
 
