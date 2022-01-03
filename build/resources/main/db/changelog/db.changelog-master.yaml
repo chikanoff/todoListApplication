@@ -1,5 +1,0 @@
-databaseChangeLog:
-    - include:
-          file: db/changelog/02-create-users-scheme.xml
-    -   include:
-          file: db/changelog/01-create-todoItems-scheme.xml
