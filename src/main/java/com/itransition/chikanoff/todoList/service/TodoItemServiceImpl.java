@@ -1,5 +1,6 @@
 package com.itransition.chikanoff.todoList.service;
 
+import com.itransition.chikanoff.todoList.mapper.CreateRequestTodoItemMapper;
 import com.itransition.chikanoff.todoList.model.dto.UpdateTodoItemRequest;
 import com.itransition.chikanoff.todoList.model.entity.TodoItem;
 import com.itransition.chikanoff.todoList.model.entity.User;
@@ -7,6 +8,7 @@ import com.itransition.chikanoff.todoList.exceptions.ItemNotFoundException;
 import com.itransition.chikanoff.todoList.model.dto.CreateTodoItemRequest;
 import com.itransition.chikanoff.todoList.repository.TodoItemRepository;
 import com.itransition.chikanoff.todoList.repository.UserRepository;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,43 +28,27 @@ public class TodoItemServiceImpl implements TodoItemService {
     @Override
     public void create(CreateTodoItemRequest item) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User currentUser = userRepository.findByUsername(username).get();
-        TodoItem todo = TodoItem.builder()
-                                .name(item.getName())
-                                .description(item.getDescription())
-                                .date(item.getDate())
-                                .build();
+        User currentUser = userRepository.findByUsername(username).orElseThrow(ItemNotFoundException::new);
+
+        TodoItem todo = CreateRequestTodoItemMapper.INSTANCE.requestToTodoItem(item);
         todo.setUser(currentUser);
         todoItemRepository.save(todo);
     }
 
     @Override
     public void update(Long id, UpdateTodoItemRequest req) {
-        Optional<TodoItem> i = todoItemRepository.findById(id);
-        i.ifPresentOrElse(
-                x -> {
-                    x.setDescription(req.getDescription());
-                    x.setDone(req.isDone());
-                    x.setName(req.getName());
-                    x.setDate(req.getDate());
-                    todoItemRepository.save(x);
-                },
-                () -> {
-                    throw new ItemNotFoundException("Item not found with id" + id);
-                });
+        TodoItem item = findOrThrow(id);
+        item.setName(req.getName());
+        item.setDescription(req.getDescription());
+        item.setDate(req.getDate());
+        todoItemRepository.save(item);
     }
 
     @Override
     public void changeStatus(Long id) {
-        Optional<TodoItem> item = todoItemRepository.findById(id);
-        // NEW
-        // OLD
-        if (item.isPresent()) {
-            TodoItem existingItem = item.get();
-            existingItem.setDone(!existingItem.isDone());
-        } else {
-            throw new ItemNotFoundException("Item not found with id " + id);
-        }
+        TodoItem item = findOrThrow(id);
+        item.setDone(!item.isDone());
+        todoItemRepository.save(item);
     }
 
     @Override
@@ -77,11 +63,11 @@ public class TodoItemServiceImpl implements TodoItemService {
 
     @Override
     public TodoItem findById(Long id) {
-        Optional<TodoItem> item = todoItemRepository.findById(id);
-        if (item.isPresent()) {
-            return item.get();
-        } else {
-            throw new ItemNotFoundException("Item not found with id " + id);
-        }
+        return findOrThrow(id);
+    }
+
+    private TodoItem findOrThrow(Long id) {
+        return todoItemRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException("Item not found with id " + id));
     }
 }
