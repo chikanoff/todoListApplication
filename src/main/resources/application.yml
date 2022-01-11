@@ -10,5 +10,5 @@ spring:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 
-jwtSecret: ${JWT_SECRET_KEY}
-jwtExpirationMs: ${JWT_EXPIRATION_TIME}
+auth.prop.jwtSecret: ${JWT_SECRET_KEY}
+auth.prop.jwtExpirationMs: ${JWT_EXPIRATION_TIME}

@@ -1,7 +1,7 @@
 package com.itransition.chikanoff.todoList.config;
 
-import com.itransition.chikanoff.todoList.jwt.AuthEntryPointJwt;
-import com.itransition.chikanoff.todoList.jwt.AuthTokenFilter;
+import com.itransition.chikanoff.auth.jwt.AuthEntryPointJwt;
+import com.itransition.chikanoff.auth.jwt.AuthTokenFilter;
 import com.itransition.chikanoff.todoList.service.jwt.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

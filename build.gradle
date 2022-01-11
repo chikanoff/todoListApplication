@@ -33,6 +33,8 @@ ext {
 
 dependencies {
 	implementation 'org.liquibase:liquibase-core'
+	implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
+	implementation project(":auth-spring-boot-starter")
 	implementation "org.springframework.security:spring-security-core:$springSecurityVersion"
 	implementation "org.springframework.security:spring-security-web:$springSecurityVersion"
 	implementation "javax.validation:validation-api:$javaxValidationVersion"
@@ -43,7 +45,6 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-autoconfigure:$springBootVersion"
 	implementation "org.mapstruct:mapstruct:$mapstructVersion"
 	annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
-
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

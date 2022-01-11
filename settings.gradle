@@ -1,1 +1,3 @@
 rootProject.name = 'todoList'
+include 'auth-spring-boot-starter'
+
