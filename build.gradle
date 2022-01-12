@@ -30,7 +30,7 @@ ext {
 	testContainersVersion = '2.0.18'
 	mapstructVersion = '1.4.2.Final'
 }
-allprojects {
+subprojects {
 	apply plugin: 'java'
 	dependencies {
 		compileOnly 'org.projectlombok:lombok'
@@ -42,8 +42,54 @@ allprojects {
 		implementation "io.jsonwebtoken:jjwt:$jwtVersion"
 		implementation "org.springframework.boot:spring-boot-starter-web"
 	}
-}
 
+	def qualityExcludeList = [
+			'**/beans/**',
+			'**/exceptions/**',
+			'**/payloads/**'
+	]
+
+	jacocoTestReport {
+		dependsOn test
+		afterEvaluate {
+			classDirectories.setFrom(files(classDirectories.files.collect {
+				fileTree(dir: it, exclude: qualityExcludeList)
+			}))
+		}
+	}
+
+	jacocoTestCoverageVerification {
+		afterEvaluate {
+			classDirectories.setFrom(files(classDirectories.files.collect {
+				fileTree(dir: it, exclude: qualityExcludeList)
+			}))
+		}
+
+		violationRules {
+			rule {
+				limit {
+					counter = 'LINE'
+					value = 'COVEREDRATIO'
+					minimum = 0.9
+				}
+			}
+			rule {
+				limit {
+					counter = 'BRANCH'
+					value = 'COVEREDRATIO'
+					minimum = 0.8
+				}
+			}
+		}
+	}
+
+	check.dependsOn jacocoTestCoverageVerification
+
+	checkstyle {
+		toolVersion = checkStyleVersion
+	}
+
+}
 
 test {
 	useJUnitPlatform()
