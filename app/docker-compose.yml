@@ -2,7 +2,7 @@ version: '2.2'
 
 services:
     app_server:
-        build: .
+        build: ..
         restart: always
         ports:
             - "8080:8080"

@@ -7,11 +7,8 @@ import com.itransition.chikanoff.todoList.model.entity.User;
 import com.itransition.chikanoff.todoList.model.dto.CreateTodoItemRequest;
 import com.itransition.chikanoff.todoList.service.jwt.UserDetailsImpl;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 

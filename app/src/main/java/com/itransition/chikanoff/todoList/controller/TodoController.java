@@ -5,7 +5,6 @@ import com.itransition.chikanoff.todoList.model.entity.TodoItem;
 import com.itransition.chikanoff.todoList.model.dto.CreateTodoItemRequest;
 import com.itransition.chikanoff.todoList.service.TodoItemServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
