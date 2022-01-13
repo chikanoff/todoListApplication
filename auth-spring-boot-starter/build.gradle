@@ -1,0 +1,21 @@
+plugins {
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+    id 'java'
+}
+
+group 'com.itransition.chikanoff.auth'
+version '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor "org.springframework.boot:spring-boot-autoconfigure-processor"
+    implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
+}
+
+test {
+    useJUnitPlatform()
+}
