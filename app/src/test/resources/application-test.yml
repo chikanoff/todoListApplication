@@ -8,5 +8,5 @@ spring:
         username: ${embedded.mysql.user}
         password: ${embedded.mysql.password}
 
-jwtSecret: 'asdasd'
-jwtExpirationMs: '1231111'
+auth.prop.jwtSecret: 'asdasd'
+auth.prop.jwtExpirationMs: '1231111'
